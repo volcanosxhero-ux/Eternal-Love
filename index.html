@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مرسم بسملة | Eternal Love</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap');
+
+:root {
+  --wine: #591c32;
+  --dark: #210e19;
+  --gold: #e7c786;
+  --cream: #fff8ed;
+  --pink: #e9a5b6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--dark);
+  color: var(--cream);
+  font-family: 'Cairo', sans-serif;
+}
+
+button, input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: .25s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.hidden {
+  display: none !important;
+}
+
+header {
+  padding: 22px 15px;
+  text-align: center;
+  border-bottom: 1px solid #e7c78635;
+  background: linear-gradient(135deg, #351322, #1b0b14);
+}
+
+.logo {
+  color: var(--gold);
+  font-family: 'Amiri', serif;
+  font-size: 29px;
+  margin: 0;
+}
+
+header p {
+  margin: 5px 0 0;
+  color: #d9bdc6;
+  font-size: 13px;
+}
+
+main {
+  width: min(950px, 94%);
+  margin: 30px auto;
+}
+
+.card {
+  background: #321522;
+  border: 1px solid #e7c78635;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 15px 40px #0003;
+  margin-bottom: 22px;
+}
+
+.welcome {
+  text-align: center;
+  padding: 42px 22px;
+}
+
+.welcome .heart {
+  font-size: 65px;
+  animation: pulse 2s infinite;
+}
+
+h1, h2, h3 {
+  color: var(--gold);
+}
+
+.welcome h1 {
+  font-family: 'Amiri', serif;
+  font-size: clamp(28px, 6vw, 44px);
+}
+
+.welcome p, .instructions {
+  color: #ead9df;
+  line-height: 2;
+}
+
+.primary {
+  border: 0;
+  border-radius: 30px;
+  padding: 13px 28px;
+  color: #29121c;
+  background: linear-gradient(135deg, #f6dfa6, #c79b53);
+  font-size: 16px;
+  font-weight: 800;
+  margin: 8px;
+}
+
+.secondary {
+  border: 1px solid var(--gold);
+  border-radius: 25px;
+  padding: 10px 18px;
+  background: transparent;
+  color: var(--gold);
+  margin: 4px;
+}
+
+.progress {
+  height: 7px;
+  background: #ffffff18;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 18px 0;
+}
+
+.progress div {
+  width: 0%;
+  height: 100%;
+  background: var(--gold);
+  transition: width .5s;
+}
+
+.step-label {
+  color: var(--pink);
+  font-size: 13px;
+}
+
+.task-title {
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 32px;
+  margin-bottom: 0;
+}
+
+.task-description {
+  text-align: center;
+  color: #e5d1d9;
+  line-height: 1.9;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
+}
+
+.tool {
+  border: 1px solid #e7c78650;
+  background: #25101b;
+  color: var(--cream);
+  padding: 8px 13px;
+  border-radius: 12px;
+}
+
+.tool.active {
+  background: var(--gold);
+  color: var(--dark);
+}
+
+#colorPicker {
+  width: 43px;
+  height: 40px;
+  padding: 3px;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: transparent;
+}
+
+#brushSize {
+  width: 100px;
+  accent-color: var(--gold);
+}
+
+.canvas-wrap {
+  background: #fffaf3;
+  padding: 6px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 350px;
+  background: #fffaf3;
+  border-radius: 9px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 18px;
+}
+
+.note {
+  color: #cdb5bf;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.8;
+}
+
+.saved-preview {
+  width: min(100%, 350px);
+  background: white;
+  border-radius: 12px;
+  padding: 5px;
+  display: block;
+  margin: 18px auto;
+}
+
+#equation {
+  text-align: center;
+  padding: 30px 12px;
+  background: radial-gradient(ellipse at center, #743149 0%, #321522 65%);
+  border: 1px solid #e7c78665;
+  border-radius: 22px;
+}
+
+.equation-title {
+  font-family: 'Amiri', serif;
+  color: var(--gold);
+  font-size: clamp(24px, 5vw, 38px);
+}
+
+.equation-hearts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.heart-result {
+  width: min(34%, 200px);
+  min-width: 110px;
+}
+
+.heart-result img {
+  width: 100%;
+  border: 3px solid var(--gold);
+  border-radius: 12px;
+  background: #fffaf3;
+}
+
+.operator {
+  color: var(--gold);
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.eternal {
+  font-family: 'Amiri', serif;
+  font-size: clamp(30px, 7vw, 54px);
+  color: #f5d99c;
+  text-shadow: 0 0 22px #e7c78645;
+  direction: ltr;
+}
+
+.arabic-love {
+  font-family: 'Amiri', serif;
+  font-size: 27px;
+  color: #f5c1cf;
+}
+
+.final-message {
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 21px;
+  line-height: 2;
+  color: #f4dfe6;
+}
+
+/* تنسيق رسالة النهاية والصورة فقط */
+.love-letter {
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 17px;
+  line-height: 2.2;
+  color: #fff0f4;
+  padding: 15px 8px;
+  animation: letterReveal 1.8s ease both;
+}
+
+.love-letter p {
+  margin: 15px 0;
+}
+
+.big-love {
+  font-family: 'Amiri', serif;
+  color: #f5d99c;
+  font-size: clamp(25px, 6vw, 39px);
+  line-height: 1.8;
+  text-shadow: 0 0 20px #e7c78650;
+}
+
+.final-photo-frame {
+  width: min(100%, 520px);
+  margin: 28px auto 15px;
+  padding: 7px;
+  border: 2px solid #e7c786;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #e7c786, #8e6536, #f5dfa6);
+  box-shadow: 0 0 30px #e7c78625;
+  animation: letterReveal 2.5s ease both;
+}
+
+.final-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 11px;
+}
+
+.photo-caption {
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 23px;
+  color: #e7c786;
+  direction: ltr;
+}
+
+footer {
+  text-align: center;
+  color: #a98d99;
+  padding: 25px;
+  font-size: 12px;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.09); }
+}
+
+@keyframes letterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media(max-width: 500px) {
+  main {
+    margin-top: 18px;
+  }
+
+  .card {
+    padding: 17px;
+  }
+
+  canvas {
+    height: 300px;
+  }
+
+  .task-title {
+    font-size: 27px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1 class="logo">♡ مرسم الفنانة بسملة ♡</h1>
+  <p>Eternal Love · حكاية مرسومة بإيدك</p>
+</header>
+
+<main>
+
+  <!-- الصفحة الأولى -->
+  <section id="welcome" class="card welcome">
+    <div class="heart">♡</div>
+    <h1>أهلاً بالفنانة بسملة</h1>
+    <p>
+      النهارده عندنا شوية رسومات صغيرة،<br>
+      بس كل رسمة فيهم ليها حكاية خاصة بيها...<br>
+      جاهزة يا فنانة نبدأ؟
+    </p>
+    <button class="primary" onclick="startGame()">
+      ابدئي المغامرة ♡
+    </button>
+  </section>
+
+  <!-- منطقة اللعبة والرسم -->
+  <section id="game" class="hidden">
+
+    <div class="card">
+      <div class="step-label" id="stepLabel">المهمة الأولى من 3</div>
+      <div class="progress"><div id="progressBar"></div></div>
+
+      <h2 class="task-title" id="taskTitle">ارسمي قلبك</h2>
+      <p class="task-description" id="taskDescription">
+        عايز أشوف قلبك لو كان رسمة، هيبقى شكله عامل إزاي؟ ❤️
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="toolbar">
+        <button class="tool active" id="penBtn" onclick="setTool('pen')">
+          ✏️ قلم
+        </button>
+
+        <button class="tool" id="eraserBtn" onclick="setTool('eraser')">
+          🧽 استيكة
+        </button>
+
+        <label class="tool">
+          🎨 اللون
+          <input type="color" id="colorPicker" value="#b32955">
+        </label>
+
+        <label class="tool">
+          الحجم
+          <input type="range" id="brushSize" min="1" max="30" value="5">
+        </label>
+
+        <button class="tool" onclick="undo()">↩️ تراجع</button>
+        <button class="tool" onclick="clearCanvas()">🗑️ مسح</button>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="drawingCanvas"></canvas>
+      </div>
+
+      <p class="note">
+        ارسمي بإيدك على الشاشة أو بالماوس، واختاري الألوان اللي تعجبك.
+      </p>
+
+      <div class="controls">
+        <button class="primary" onclick="saveDrawing()">
+          احفظي الرسمة ❤️
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- شاشة عرض الرسومات -->
+  <section id="previewScreen" class="card hidden">
+    <h2 class="task-title" id="previewTitle">رسمة جميلة!</h2>
+    <p class="task-description" id="previewText"></p>
+
+    <img id="previewImage" class="saved-preview" alt="الرسمة المحفوظة">
+
+    <div class="controls">
+      <button class="primary" onclick="nextStage()">
+        كمّلي الحكاية ♡
+      </button>
+    </div>
+  </section>
+
+  <!-- المعادلة النهائية -->
+  <section id="equationScreen" class="card hidden">
+    <h2 class="task-title">طب استني لحظة يا بسملة... 👀</h2>
+
+    <p class="task-description">
+      مش إنتِ شاطرة في الرياضة؟<br>
+      طيب يا ستي، كوني المعادلة دي!
+    </p>
+
+    <div id="equation">
+      <div class="equation-title">معادلة محدش يعرف يحلها غيرك</div>
+
+      <div class="equation-hearts">
+        <div class="heart-result">
+          <img id="herHeart" alt="قلب بسملة">
+          <p>قلب بسملة</p>
+        </div>
+
+        <span class="operator">+</span>
+
+        <div class="heart-result">
+          <img id="myHeart" alt="القلب الثاني">
+          <p>قلبي</p>
+        </div>
+
+        <span class="operator">=</span>
+      </div>
+
+      <div class="eternal">𝓔𝓽𝓮𝓻𝓷𝓪𝓵 𝓛𝓸𝓿𝓮</div>
+      <div class="arabic-love">♡ حُــب أبــدي ♡</div>
+
+      <p class="final-message">
+        في معادلات كتير ممكن نحلها بالأرقام...<br>
+        بس المعادلة دي، إجابتها مش رقم. ♾️
+      </p>
+    </div>
+
+    <div class="controls">
+      <button class="primary" onclick="showEnding()">
+        لسه فيه حاجة أخيرة ♡
+      </button>
+
+      <button class="secondary" onclick="downloadResult()">
+        💾 احفظي المعادلة
+      </button>
+    </div>
+  </section>
+
+  <!-- صفحة النهاية -->
+  <section id="endingScreen" class="card hidden">
+
+    <h2 class="task-title">♡ رسالة أخيرة لبسبوسة ♡</h2>
+
+    <div class="love-letter">
+      <p>بصي يا بسملة ❤️</p>
+
+      <p>
+        أنا كنت عامل الموقع ده عشان أفرحك والله،
+        ويمكن أكون قصرت معاكي شوية عشان اشتغلت عليه،
+        بس والله من إني عايز أحسسك إنك ملكة كل البنات،
+        وإنتِ فعلًا كده عندي. 👑❤️
+      </p>
+
+      <p>
+        وفي الآخر حابب أقولك إنّي...
+      </p>
+
+      <h2 class="big-love">
+        أُحِبُّكِ أَنَاااااااععععععععععععععععععع ❤️
+      </h2>
+    </div>
+
+    <!-- الصورة تحت الرسالة مباشرة -->
+    <div class="final-photo-frame">
+      <img
+        src="basmala.jpg"
+        alt="بسملة ❤️"
+        class="final-photo"
+      >
+    </div>
+
+    <p class="photo-caption">
+      𝓔𝓽𝓮𝓻𝓷𝓪𝓵 𝓛𝓸𝓿𝓮 ♡ حُب أبدي
+    </p>
+
+    <div class="controls">
+      <button class="primary" onclick="downloadResult()">
+        احفظي حكايتنا 💾
+      </button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  Made with love ♡ Eternal Love
+</footer>
+
+<script>
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas.getContext('2d');
+
+let drawing = false;
+let currentTool = 'pen';
+let lastX = 0;
+let lastY = 0;
+let history = [];
+
+let currentStage = 0;
+
+const drawings = {
+  herHeart: localStorage.getItem('basmala_her_heart') || null,
+  myHeart: localStorage.getItem('basmala_my_heart') || null
+};
+
+const stages = [
+  {
+    title: 'المهمة الأولى: ارسمي قلبك ❤️',
+    description: 'عايز أشوف قلبك لو كان رسمة، هيبقى شكله عامل إزاي؟ ارسمِي براحتك، مفيش إجابة صح أو غلط.',
+    previewTitle: 'ده قلب بسملة ❤️',
+    previewText: 'أول رسمة في حكايتنا... قلبك إنتِ اللي رسمتيه.'
+  },
+  {
+    title: 'المهمة الثانية: ارسمِي قلبي ❤️',
+    description: 'بما إنك الفنانة، وريني بقا إنتِ متخيلة قلبي عامل إزاي. 😂❤️',
+    previewTitle: 'وده القلب التاني ❤️',
+    previewText: 'دلوقتي بقى عندنا قلبك والقلب اللي إنتِ رسمتيه.'
+  }
+];
+
+// تجهيز مساحة الرسم
+function setupCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const ratio = window.devicePixelRatio || 1;
+
+  canvas.width = Math.round(rect.width * ratio);
+  canvas.height = Math.round(rect.height * ratio);
+
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.fillStyle = '#fffaf3';
+  ctx.fillRect(0, 0, rect.width, rect.height);
+
+  history = [];
+}
+
+function startGame() {
+  document.getElementById('welcome').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+
+  setupCanvas();
+  updateStage();
+}
+
+function updateStage() {
+  const stage = stages[currentStage];
+
+  document.getElementById('stepLabel').textContent =
+    `المهمة ${currentStage + 1} من 3`;
+
+  document.getElementById('progressBar').style.width =
+    currentStage === 0 ? '33%' : '66%';
+
+  document.getElementById('taskTitle').textContent = stage.title;
+  document.getElementById('taskDescription').textContent =
+    stage.description;
+}
+
+function getPosition(event) {
+  const rect = canvas.getBoundingClientRect();
+
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+}
+
+function saveHistory() {
+  history.push(canvas.toDataURL('image/png'));
+
+  if (history.length > 30) {
+    history.shift();
+  }
+}
+
+function startDrawing(event) {
+  event.preventDefault();
+
+  drawing = true;
+
+  const pos = getPosition(event);
+  lastX = pos.x;
+  lastY = pos.y;
+
+  saveHistory();
+  canvas.setPointerCapture(event.pointerId);
+}
+
+function draw(event) {
+  if (!drawing) return;
+
+  event.preventDefault();
+
+  const pos = getPosition(event);
+
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(pos.x, pos.y);
+
+  ctx.lineWidth = Number(
+    document.getElementById('brushSize').value
+  );
+
+  ctx.strokeStyle = currentTool === 'eraser'
+    ? '#fffaf3'
+    : document.getElementById('colorPicker').value;
+
+  ctx.stroke();
+
+  lastX = pos.x;
+  lastY = pos.y;
+}
+
+function stopDrawing() {
+  drawing = false;
+}
+
+canvas.addEventListener('pointerdown', startDrawing);
+canvas.addEventListener('pointermove', draw);
+canvas.addEventListener('pointerup', stopDrawing);
+canvas.addEventListener('pointercancel', stopDrawing);
+canvas.addEventListener('lostpointercapture', stopDrawing);
+
+function setTool(tool) {
+  currentTool = tool;
+
+  document.getElementById('penBtn').classList.toggle(
+    'active', tool === 'pen'
+  );
+
+  document.getElementById('eraserBtn').classList.toggle(
+    'active', tool === 'eraser'
+  );
+}
+
+function undo() {
+  if (history.length === 0) return;
+
+  const previous = history.pop();
+  const image = new Image();
+
+  image.onload = () => {
+    const rect = canvas.getBoundingClientRect();
+
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.fillStyle = '#fffaf3';
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    ctx.drawImage(image, 0, 0, rect.width, rect.height);
+  };
+
+  image.src = previous;
+}
+
+function clearCanvas() {
+  if (!confirm('متأكدة إنك عايزة تمسحي الرسمة؟')) return;
+
+  saveHistory();
+
+  const rect = canvas.getBoundingClientRect();
+
+  ctx.fillStyle = '#fffaf3';
+  ctx.fillRect(0, 0, rect.width, rect.height);
+}
+
+function saveDrawing() {
+  const imageData = canvas.toDataURL('image/png');
+
+  try {
+    if (currentStage === 0) {
+      localStorage.setItem('basmala_her_heart', imageData);
+      drawings.herHeart = imageData;
+    } else {
+      localStorage.setItem('basmala_my_heart', imageData);
+      drawings.myHeart = imageData;
+    }
+  } catch (error) {
+    alert('المساحة المتاحة للحفظ غير كافية. جربي متصفحاً آخر.');
+    return;
+  }
+
+  document.getElementById('game').classList.add('hidden');
+  document.getElementById('previewScreen').classList.remove('hidden');
+
+  document.getElementById('previewTitle').textContent =
+    stages[currentStage].previewTitle;
+
+  document.getElementById('previewText').textContent =
+    stages[currentStage].previewText;
+
+  document.getElementById('previewImage').src = imageData;
+}
+
+function nextStage() {
+  document.getElementById('previewScreen').classList.add('hidden');
+
+  if (currentStage === 0) {
+    currentStage = 1;
+
+    document.getElementById('game').classList.remove('hidden');
+    setupCanvas();
+    updateStage();
+
+  } else {
+    document.getElementById('equationScreen').classList.remove('hidden');
+
+    document.getElementById('herHeart').src = drawings.herHeart;
+    document.getElementById('myHeart').src = drawings.myHeart;
+
+    document.getElementById('progressBar').style.width = '100%';
+  }
+}
+
+function showEnding() {
+  document.getElementById('equationScreen').classList.add('hidden');
+  document.getElementById('endingScreen').classList.remove('hidden');
+}
+
+function downloadResult() {
+  if (!drawings.herHeart || !drawings.myHeart) {
+    alert('كمّلي الرسمتين الأول عشان تحفظي المعادلة!');
+    return;
+  }
+
+  const link = document.createElement('a');
+  link.download = 'Eternal-Love-Basmala.png';
+
+  const resultCanvas = document.createElement('canvas');
+  const resultCtx = resultCanvas.getContext('2d');
+
+  resultCanvas.width = 1000;
+  resultCanvas.height = 700;
+
+  resultCtx.fillStyle = '#321522';
+  resultCtx.fillRect(0, 0, 1000, 700);
+
+  resultCtx.textAlign = 'center';
+  resultCtx.direction = 'ltr';
+  resultCtx.fillStyle = '#e7c786';
+  resultCtx.font = 'bold 44px serif';
+  resultCtx.fillText('Eternal Love', 500, 80);
+
+  resultCtx.direction = 'rtl';
+  resultCtx.font = 'bold 32px serif';
+  resultCtx.fillText('حب أبدي', 500, 130);
+
+  const herImage = new Image();
+  const myImage = new Image();
+
+  herImage.onload = () => {
+    myImage.onload = () => {
+      resultCtx.drawImage(herImage, 120, 190, 300, 270);
+      resultCtx.drawImage(myImage, 580, 190, 300, 270);
+
+      resultCtx.direction = 'ltr';
+      resultCtx.fillStyle = '#e7c786';
+      resultCtx.font = 'bold 70px serif';
+      resultCtx.fillText('+', 500, 340);
+      resultCtx.fillText('=', 500, 470);
+
+      resultCtx.font = 'bold 35px serif';
+      resultCtx.fillText('Forever & Ever', 500, 560);
+
+      link.href = resultCanvas.toDataURL('image/png');
+      link.click();
+    };
+
+    myImage.src = drawings.myHeart;
+  };
+
+  herImage.src = drawings.herHeart;
+}
+
+window.addEventListener('load', () => {
+  drawings.herHeart =
+    localStorage.getItem('basmala_her_heart') || null;
+
+  drawings.myHeart =
+    localStorage.getItem('basmala_my_heart') || null;
+});
+</script>
+
+</body>
+</html>
